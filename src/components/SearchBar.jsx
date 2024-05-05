@@ -1,17 +1,27 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react';
 
-const Search = () => {
-    const[search,setSearch]=useState("")
+const SearchBar = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleClick = () => {
+    onSearch(searchTerm);
+  };
+
   return (
-    <div>
-      <form>
-        <label>Search</label>
-        <input onChange={(e)=>setSearch(e.target.value)}></input>
-      </form>
-
+    <div className="search-bar">
+      <input
+        type="text"
+        placeholder="Search your recent transactions"
+        value={searchTerm}
+        onChange={handleChange}
+      />
+      <button onClick={handleClick}>Search</button>
     </div>
-  )
-}
+  );
+};
 
-export default Search
+export default SearchBar;

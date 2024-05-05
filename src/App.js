@@ -1,25 +1,39 @@
-import "./App.css";
-import Form from "./components/Forms.jsx";
-import Search from "./components/SearchBar.jsx";
-import Table from "./components/Tables.jsx";
-import { useState } from 'react';
-function App() {
-  const [formDataInput, setFormInput] = useState([]);
+import React, { useState } from 'react';
+import TransactionTable from './components/TransactionTable';
+import TransactionForm from './components/TransactionForm';
+import SearchBar from './components/SearchBar';
+import './App.css';
 
-  const handleFormSubmitButton = (formData) => {
-    setFormInput([...formDataInput, formData]);
+const App = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
+
+  const handleAddTransaction = (newTransaction) => {
+    setTransactions([...transactions, newTransaction]);
+    setFilteredTransactions([...filteredTransactions, newTransaction]); 
+  };
+
+  const handleSearch = (searchTerm) => {
+    const filtered = transactions.filter(transaction =>
+      transaction.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredTransactions(filtered);
   };
 
   return (
-    <div>
-      <header>
-        <h1 style={{background:"purple",textAlign:"center"}}>The Royal Bank of Flatiron</h1>
-  <Search/>
-      </header>
-      <Form onSubmit={handleFormSubmitButton} />
-      <Table formData={formDataInput} />
+    <div className="App">
+      <h1>The Royal Bank of Flatiron</h1>
+      <div className="transaction-form">
+        <TransactionForm onSubmit={handleAddTransaction} transactions={transactions} />
+      </div>
+      <div className="search-bar">
+        <SearchBar onSearch={handleSearch} />
+      </div>
+      <div className="transaction-table">
+        <TransactionTable transactions={filteredTransactions} />
+      </div>
     </div>
   );
-}
+};
 
-export default App
+export default App;
